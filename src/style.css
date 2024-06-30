@@ -26,8 +26,19 @@ body {
 }
 
 .item {
+    display: flex;
     background-color: var(--bg-color);
-    padding: 2em;
+    height: 90px;
+    width: 90px;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 900;
+    font-size: 3.25rem;
+}
+
+.item * {
+    font-size: 5rem;
 }
 
 .choice {
@@ -44,4 +55,12 @@ body {
     font-weight: 900;
     margin-right: 1em;
     margin-left: 1em;
+    border-radius: 5px;
+    border: 2px solid black;
+    transition: all 0.1s ease
+}
+
+
+.choice > button:focus {
+    scale: 1.2;
 }
