@@ -28,35 +28,61 @@ function checkWin(player) {
     return false;
 }
 
-function GameStatus(status) {
+function GameStatus(status, command) {
     if (status) {
         setTimeout(function () {
-            alert("Win this game is" + playerCommand);
-        }, 100);
+            alert("Win this game is " + command);
+            resetBoard();
+        }, 200);
     }
 }
-
+  
 function renderBoard() {
     const boardElement = document.querySelector('.container');
     boardElement.innerHTML = ''; // Очищаем игровое поле
   
     board.forEach((row, rowIndex) => {
-        row.forEach((cell, colIndex) => {
-            const cellElement = document.createElement('div');
-            cellElement.classList.add('cell');
-            cellElement.textContent = cell;
-            cellElement.onclick = () => cellClick(rowIndex, colIndex);
-            boardElement.appendChild(cellElement);
-        });
+      row.forEach((cell, colIndex) => {
+        const cellElement = document.createElement('div');
+        cellElement.classList.add('item');
+        cellElement.textContent = cell;
+        cellElement.onclick = () => cellClick(rowIndex, colIndex);
+        boardElement.appendChild(cellElement);
+      });
     });
-}
-  
+  }
+
 function cellClick(row, col) {
     if (board[row][col] === '') {
         board[row][col] = playerCommand;
         // renderBoard();
         // checkGameStatus();
         // currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Переключение игрока
+
+        GameStatus(checkWin(playerCommand), playerCommand)
+
+        makeBotMove()
+
+    }
+}
+
+function makeBotMove() {
+    // Простейшая реализация бота: выбираем первую пустую клетку слева направо, сверху вниз
+    for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+            if (board[row][col] === '') {
+                if (playerCommand == "X") {
+                    AIPlayerCommand = "O"
+                }
+                else {
+                    AIPlayerCommand = "X"
+                }
+                board[row][col] = AIPlayerCommand;
+                setTimeout(renderBoard, 100)
+                GameStatus(checkWin(AIPlayerCommand), AIPlayerCommand)
+                return;
+            }
+        }
     }
 }
 
@@ -64,13 +90,17 @@ function resetBoard() {
     items.forEach(item => {
         item.innerHTML = "";
     })
+    board = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+    ];
 }
 
 items.forEach(item => {
     item.addEventListener('click', function () {
         if (item.textContent === "") {
             item.textContent = playerCommand;
-            GameStatus(checkWin(playerCommand))
         }
     })
 });
